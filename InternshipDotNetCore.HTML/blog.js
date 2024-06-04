@@ -41,7 +41,7 @@ function updateBlog(id,title,author,content){
     console.log(items);   
     console.log(items.length);   
 
-    if(items.lengthlog == 0){
+    if(items.length == 0){
         console.log("No Dat Found!");
         return;
     }
