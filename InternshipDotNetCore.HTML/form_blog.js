@@ -38,6 +38,18 @@ function editBlog(id) {
     $('#txtTitle').focus();
 }
 
+function getBlogs() {
+    const blogs = localStorage.getItem(tblBlog);
+    console.log(blogs);
+
+    let lst = [];
+    if (blogs !== null) {
+        lst = JSON.parse(blogs);
+    }
+    return lst;
+}
+
+
 function createBlog(title, author, content) {
     let lst = getBlogs();
 
@@ -113,16 +125,6 @@ function uuidv4() {
     );
 }
 
-function getBlogs() {
-    const blogs = localStorage.getItem(tblBlog);
-    console.log(blogs);
-
-    let lst = [];
-    if (blogs !== null) {
-        lst = JSON.parse(blogs);
-    }
-    return lst;
-}
 
 $('#btnSave').click(function () {
     const title = $('#txtTitle').val();
