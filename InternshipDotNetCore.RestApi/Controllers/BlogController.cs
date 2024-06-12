@@ -1,5 +1,11 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Dapper;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Text;
 
 namespace InternshipDotNetCore.RestApi.Controllers
 {
@@ -7,22 +13,67 @@ namespace InternshipDotNetCore.RestApi.Controllers
     [ApiController]
     public class BlogController : ControllerBase
     {
+        private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
+
+        public BlogController()
+        {
+            /* _sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
+             _sqlConnectionStringBuilder.DataSource = ".";
+             _sqlConnectionStringBuilder.InitialCatalog = "AceInternship";
+             _sqlConnectionStringBuilder.UserID = "sa";
+             _sqlConnectionStringBuilder.Password = "twl@123";*/
+
+            _sqlConnectionStringBuilder = new SqlConnectionStringBuilder()
+            {
+                DataSource = ".",
+                InitialCatalog = "AceInternship",
+                UserID = "sa",
+                Password = "twl@123"
+            };
+        }
+
         [HttpGet]
         public IActionResult GetBlogs()
         {
-            return Ok("GetBlogs");
+            /*string query = @"SELECT [BlogId]
+                                  ,[BlogTitle]
+                                  ,[BlogAuthor]
+                                  ,[BlogContent]
+                              FROM [dbo].[Tbl_Blog]";*/
+
+            using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            var lst = db.Query<TblBlog>(Quaries.BlogList).ToList();
+            return Ok(lst);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetBlogs(int id)
+        {   
+            using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            var item = db.Query<TblBlog>(Quaries.BlogById, new { BlogId = id }).FirstOrDefault();
+            if(item is null)
+            
+                return NotFound("No Data Found.");            
+            return Ok(item);
         }
 
         [HttpPost]
-        public IActionResult CreateBlog()
+        public IActionResult CreateBlog(TblBlog tblBlog)
         {
-            return Ok("CreateBlog");
+            using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            int result = db.Execute(Quaries.BlogCreate, tblBlog);
+            string message = result > 0 ? "Saving Successful!" : "Saving Failed!";
+            return Ok(message);
         }
 
-        [HttpPut]
-        public IActionResult UpdateBlog()
+        [HttpPut("{id}")]
+        public IActionResult UpdateBlog(int id,TblBlog tblBlog)
         {
-            return Ok("UpdateBlog");
+            tblBlog.BlogId = id;
+            using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            int result = db.Execute(Quaries.BlogUpdate, tblBlog);
+            string message = result > 0 ? "Updating Successful!" : "Updating Failed!";
+            return Ok(message);
         }
 
         [HttpPatch]
@@ -31,10 +82,59 @@ namespace InternshipDotNetCore.RestApi.Controllers
             return Ok("PatchBlog");
         }
 
-        [HttpDelete]
-        public IActionResult DeleteBlog()
+        [HttpDelete("{id}")]
+        public IActionResult DeleteBlog(int id)
         {
-            return Ok("DeleteBlog");
+            using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+            var result = db.Execute(Quaries.BlogDelete, new { BlogId = id });
+            string message = result > 0 ? "Deleting Successful!" : "Deleting Failed!";
+            return Ok(message);
         }
     }
+
+
+    public class TblBlog
+    {
+        public int BlogId { get; set; }
+        public string BlogTitle { get; set; }
+        public string BlogAuthor { get; set; }
+        public string BlogContent { get; set; }
+
+    }
+
+    public static class Quaries
+    {
+        public static string BlogList { get; } = @"SELECT [BlogId]
+                                  ,[BlogTitle]
+                                  ,[BlogAuthor]
+                                  ,[BlogContent]
+                              FROM [dbo].[Tbl_Blog]";
+
+        public static string BlogById { get; } = @"SELECT [BlogId]
+                                  ,[BlogTitle]
+                                  ,[BlogAuthor]
+                                  ,[BlogContent]
+                              FROM [dbo].[Tbl_Blog] WHERE BlogId = @BlogId";
+
+        public static string BlogCreate { get; } = @"INSERT INTO[dbo].[Tbl_Blog]
+                                    ([BlogTitle]
+                                   , [BlogAuthor]
+                                   , [BlogContent])
+                             VALUES
+                                   (
+                                   @BlogTitle,
+                                   @BlogAuthor,
+                                   @BlogContent
+                                   )";
+        public static string BlogDelete { get; } = @"DELETE FROM[dbo].[Tbl_Blog]
+                            WHERE BlogId = @BlogId;";
+
+        public static string BlogUpdate { get; } = @"UPDATE [dbo].[Tbl_Blog]
+                           SET [BlogTitle] = @BlogTitle
+                              ,[BlogAuthor] = @BlogAuthor
+                              ,[BlogContent] = @BlogContent
+                           WHERE BlogId = @BlogId";
+    }
+
 }
+

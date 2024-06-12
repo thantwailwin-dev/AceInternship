@@ -5,7 +5,12 @@ VisualStudioVersion = 17.10.34818.151
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternshipDotNetCore.ConsoleApp", "InternshipDotNetCore.ConsoleApp\InternshipDotNetCore.ConsoleApp.csproj", "{C2C6EBFD-2D96-473E-BFC1-DED995A76236}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternshipDotNetCore.RestApi", "InternshipDotNetCore.RestApi\InternshipDotNetCore.RestApi.csproj", "{27248EB4-2545-4435-B968-0348EEDBA59B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternshipDotNetCore.RestApi", "InternshipDotNetCore.RestApi\InternshipDotNetCore.RestApi.csproj", "{27248EB4-2545-4435-B968-0348EEDBA59B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{9ED788E4-FF46-4F1D-A881-3C895A930015}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
