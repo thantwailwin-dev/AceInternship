@@ -47,12 +47,11 @@ namespace InternshipDotNetCore.RestApi.Controllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetBlogs(int id)
+        public IActionResult GetBlog(int id)
         {   
             using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
             var item = db.Query<TblBlog>(Quaries.BlogById, new { BlogId = id }).FirstOrDefault();
-            if(item is null)
-            
+            if(item is null)            
                 return NotFound("No Data Found.");            
             return Ok(item);
         }
@@ -64,13 +63,18 @@ namespace InternshipDotNetCore.RestApi.Controllers
             int result = db.Execute(Quaries.BlogCreate, tblBlog);
             string message = result > 0 ? "Saving Successful!" : "Saving Failed!";
             return Ok(message);
-        }
+        }   
 
         [HttpPut("{id}")]
         public IActionResult UpdateBlog(int id,TblBlog tblBlog)
-        {
-            tblBlog.BlogId = id;
+        {            
             using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+
+            /*var item = db.Query<TblBlog>(Quaries.BlogById, new { BlogId = id }).FirstOrDefault();
+            if (item is null)
+                return NotFound("No Data Found.");*/
+
+            tblBlog.BlogId = id;
             int result = db.Execute(Quaries.BlogUpdate, tblBlog);
             string message = result > 0 ? "Updating Successful!" : "Updating Failed!";
             return Ok(message);
@@ -86,12 +90,16 @@ namespace InternshipDotNetCore.RestApi.Controllers
         public IActionResult DeleteBlog(int id)
         {
             using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+
+            var item = db.Query<TblBlog>(Quaries.BlogById, new { BlogId = id }).FirstOrDefault();
+            if (item is null)
+                return NotFound("No Data Found.");
+
             var result = db.Execute(Quaries.BlogDelete, new { BlogId = id });
             string message = result > 0 ? "Deleting Successful!" : "Deleting Failed!";
             return Ok(message);
         }
     }
-
 
     public class TblBlog
     {
@@ -127,7 +135,7 @@ namespace InternshipDotNetCore.RestApi.Controllers
                                    @BlogContent
                                    )";
         public static string BlogDelete { get; } = @"DELETE FROM[dbo].[Tbl_Blog]
-                            WHERE BlogId = @BlogId;";
+                            WHERE BlogId = @BlogId";
 
         public static string BlogUpdate { get; } = @"UPDATE [dbo].[Tbl_Blog]
                            SET [BlogTitle] = @BlogTitle

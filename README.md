@@ -1,5 +1,16 @@
-ASP.NET Core Web API
- C# - Database
-	Ado.Net (old school)
-	Dapper
-	EFCore
+C# <-> Database
+===============
+	- Ado.Net (old school)
+	- Dapper
+	- EFCore
+
+~	[ ASP.NET Core Console App , ASP.NET Core Web API ]
+
+
+	
+
+
+	
+
+
+	
