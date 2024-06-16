@@ -21,7 +21,7 @@ namespace InternshipDotNetCore.ConsoleApp
             /*Update(18, "test title", "test author", "test content");*/
         }
 
-        public void Create(string apple,string mango,string orange)
+        private void Create(string apple,string mango,string orange)
         {
             var blog = new BlogDto
             {
@@ -46,7 +46,7 @@ namespace InternshipDotNetCore.ConsoleApp
             Console.WriteLine(message);           
         }
 
-        public void Read()
+        private void Read()
         {
             using IDbConnection db = new SqlConnection(ConnectionStrings.sqlConnectionStringBuilder.ConnectionString);
             string query = "select * from tbl_blog";
@@ -63,7 +63,25 @@ namespace InternshipDotNetCore.ConsoleApp
 
         }
 
-        public void Update(int id,string apple01, string mango01, string orange01)
+        private void Edit(int id)
+        {
+            using IDbConnection db = new SqlConnection(ConnectionStrings.sqlConnectionStringBuilder.ConnectionString);
+            string query = "select * from tbl_blog where blogId = @BlogId";
+            var blog = db.Query<BlogDto>(query, new BlogDto { BlogId = id }).FirstOrDefault();
+
+            if (blog is null)
+            {
+                Console.WriteLine("No Data Found!");
+                return;
+            }
+
+            Console.WriteLine("Blog Id => " + blog.BlogId);
+            Console.WriteLine("Blog Title => " + blog.BlogTitle);
+            Console.WriteLine("Blog Author => " + blog.BlogAuthor);
+            Console.WriteLine("Blog Content => " + blog.BlogContent);
+        }
+
+        private void Update(int id,string apple01, string mango01, string orange01)
         {
             using IDbConnection db = new SqlConnection(ConnectionStrings.sqlConnectionStringBuilder.ConnectionString);
 
@@ -96,25 +114,7 @@ namespace InternshipDotNetCore.ConsoleApp
             Console.WriteLine(message);
         }
 
-        public void Edit(int id)
-        {
-            using IDbConnection db = new SqlConnection(ConnectionStrings.sqlConnectionStringBuilder.ConnectionString);
-            string query = "select * from tbl_blog where blogId = @BlogId";
-            var blog = db.Query<BlogDto>(query, new BlogDto { BlogId = id }).FirstOrDefault();
-
-            if (blog is null)
-            {
-                Console.WriteLine("No Data Found!");
-                return;
-            }
-
-            Console.WriteLine("Blog Id => " + blog.BlogId);
-            Console.WriteLine("Blog Title => " + blog.BlogTitle);
-            Console.WriteLine("Blog Author => " + blog.BlogAuthor);
-            Console.WriteLine("Blog Content => " + blog.BlogContent);
-        }
-
-        public void Delete(int id)
+        private void Delete(int id)
         {
             using IDbConnection db = new SqlConnection(ConnectionStrings.sqlConnectionStringBuilder.ConnectionString);
             string query = "select * from tbl_blog where blogId = @BlogId";

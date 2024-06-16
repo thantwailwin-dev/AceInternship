@@ -9,10 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternshipDotNetCore.RestAp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Documents", "Documents", "{9ED788E4-FF46-4F1D-A881-3C895A930015}"
 	ProjectSection(SolutionItems) = preProject
+		AceInternship.sql = AceInternship.sql
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternshipDotNetCore.MiniAcePayWebApi", "InternshipDotNetCore.MiniAcePayWebApi\InternshipDotNetCore.MiniAcePayWebApi.csproj", "{AD6155DE-A2F6-41B1-AA93-611513BAE2CE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternshipDotNetCore.MiniAcePayWebApi", "InternshipDotNetCore.MiniAcePayWebApi\InternshipDotNetCore.MiniAcePayWebApi.csproj", "{AD6155DE-A2F6-41B1-AA93-611513BAE2CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

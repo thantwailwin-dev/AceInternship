@@ -14,7 +14,8 @@ namespace InternshipDotNetCore.ConsoleApp
             DataSource = ".",
             InitialCatalog = "AceInternship",
             UserID = "sa",
-            Password = "twl@123"
+            Password = "twl@123",
+            TrustServerCertificate = true
         };
     }
 }
