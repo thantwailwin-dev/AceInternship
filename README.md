@@ -1,5 +1,5 @@
-C# <-> Database
-===============
+C# => Database
+--------------
 	- Ado.Net (old school)
 	- Dapper
 	- EFCore

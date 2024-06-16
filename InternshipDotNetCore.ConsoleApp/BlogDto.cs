@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace InternshipDotNetCore.ConsoleApp
 {
-    internal class BlogDto
+    public class BlogDto
     {
         public int BlogId {  get; set; }        
         public string BlogTitle {  get; set; }
