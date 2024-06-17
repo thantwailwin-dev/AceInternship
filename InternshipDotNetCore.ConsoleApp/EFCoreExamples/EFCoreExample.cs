@@ -12,6 +12,7 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
 {
     internal class EFCoreExample
     {
+        private readonly AppDbContext _db = new AppDbContext();
         public void Run()
         {
             Read();
@@ -27,12 +28,12 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
             {
                 BlogTitle = title,
                 BlogAuthor = author,
-                BlogContent = content
+                BlogContent = content   
             };
 
-            AppDbContext db = new AppDbContext();
-            db.Blogs.Add(blog);
-            int result = db.SaveChanges();
+            /*AppDbContext db = new AppDbContext();*/
+            _db.Blogs.Add(blog);
+            int result = _db.SaveChanges();
 
             string message = result > 0 ? "Saving Successful!" : "Saving Failed!";
             Console.WriteLine(message);
@@ -40,8 +41,8 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
 
         private void Read()
         {
-            AppDbContext db = new AppDbContext();
-            List<BlogDto> lst = db.Blogs.ToList();
+            /*AppDbContext db = new AppDbContext();*/
+            var lst = _db.Blogs.ToList();
 
             foreach (BlogDto blog in lst)
             {
@@ -56,8 +57,8 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
 
         private void Edit(int id)
         {
-            AppDbContext db = new AppDbContext();
-            var blog = db.Blogs.FirstOrDefault(x => x.BlogId == id);
+            /*AppDbContext db = new AppDbContext();*/
+            var blog = _db.Blogs.FirstOrDefault(x => x.BlogId == id);
             if(blog is null)
             {
                 Console.WriteLine("No Data Found!");
@@ -73,8 +74,8 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
 
         private void Update(int id, string apple01, string mango01, string orange01)
         {
-            AppDbContext db = new AppDbContext();
-            var blog = db.Blogs.FirstOrDefault(x => x.BlogId == id);
+            /*AppDbContext db = new AppDbContext();*/
+            var blog = _db.Blogs.FirstOrDefault(x => x.BlogId == id);
             if (blog is null)
             {
                 Console.WriteLine("No Data Found!");
@@ -85,23 +86,23 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
             blog.BlogAuthor = mango01;
             blog.BlogContent = orange01;
 
-            int result = db.SaveChanges();
+            int result = _db.SaveChanges();
             string message = result > 0 ? "Updating Successful!" : "Updating Failed!";
             Console.WriteLine(message);
         }
 
         private void Delete(int id)
         {
-            AppDbContext db = new AppDbContext();
-            var blog = db.Blogs.FirstOrDefault(x => x.BlogId == id);
+            /*AppDbContext db = new AppDbContext();*/
+            var blog = _db.Blogs.FirstOrDefault(x => x.BlogId == id);
             if (blog is null)
             {
                 Console.WriteLine("No Data Found!");
                 return;
             }           
 
-            db.Remove(blog); 
-            int result = db.SaveChanges();
+            _db.Remove(blog); 
+            int result = _db.SaveChanges();
 
             string message = result > 0 ? "Deleting Successful!" : "Deleting Successful!";
             Console.WriteLine(message);

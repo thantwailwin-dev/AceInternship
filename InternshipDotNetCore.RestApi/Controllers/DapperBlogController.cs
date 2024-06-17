@@ -11,11 +11,11 @@ namespace InternshipDotNetCore.RestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class BlogController : ControllerBase
+    public class DapperBlogController : ControllerBase
     {
         private readonly SqlConnectionStringBuilder _sqlConnectionStringBuilder;
 
-        public BlogController()
+        public DapperBlogController()
         {
             /* _sqlConnectionStringBuilder = new SqlConnectionStringBuilder();
              _sqlConnectionStringBuilder.DataSource = ".";
