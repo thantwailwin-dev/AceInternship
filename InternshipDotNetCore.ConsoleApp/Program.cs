@@ -1,7 +1,7 @@
 ﻿// See https://aka.ms/new-console-template for more information
 /*Console.WriteLine("Hello, World!");*/
 
-using InternshipDotNetCore.ConsoleApp;
+using InternshipDotNetCore.ConsoleApp.EFCoreExamples;
 
 /*DapperExample dapper = new DapperExample();
 dapper.Run();*/
