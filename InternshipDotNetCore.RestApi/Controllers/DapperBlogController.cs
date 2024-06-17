@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
+using System.Reflection.Metadata;
 using System.Text;
 
 namespace InternshipDotNetCore.RestApi.Controllers
@@ -70,9 +71,9 @@ namespace InternshipDotNetCore.RestApi.Controllers
         {            
             using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
 
-            /*var item = db.Query<TblBlog>(Quaries.BlogById, new { BlogId = id }).FirstOrDefault();
+            var item = db.Query<TblBlog>(Quaries.BlogById, new { BlogId = id }).FirstOrDefault();
             if (item is null)
-                return NotFound("No Data Found.");*/
+                return NotFound("No Data Found.");
 
             tblBlog.BlogId = id;
             int result = db.Execute(Quaries.BlogUpdate, tblBlog);
@@ -80,10 +81,46 @@ namespace InternshipDotNetCore.RestApi.Controllers
             return Ok(message);
         }
 
-        [HttpPatch]
-        public IActionResult PatchBlog()
+        [HttpPatch("{id}")]
+        public IActionResult PatchBlog(int id, TblBlog blog)
         {
-            return Ok("PatchBlog");
+            using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
+
+            var item = db.Query<TblBlog>(Quaries.BlogById, new { BlogId = id }).FirstOrDefault();
+            if (item is null)
+                return NotFound("No Data Found.");
+
+            string conditions = string.Empty;
+            if (!string.IsNullOrEmpty(blog.BlogTitle))
+            {
+                conditions += " [BlogTitle] = @BlogTitle, ";
+            }
+
+            if (!string.IsNullOrEmpty(blog.BlogAuthor))
+            {
+                conditions += " [BlogAuthor] = @BlogAuthor, ";
+            }
+
+            if (!string.IsNullOrEmpty(blog.BlogContent))
+            {
+                conditions += " [BlogContent] = @BlogContent, ";
+            }
+
+            if (conditions.Length == 0)
+            {
+                return NotFound("No data to update.");
+            }
+
+            conditions = conditions.Substring(0, conditions.Length - 2);
+            blog.BlogId = id;
+
+            string query = $@"UPDATE [dbo].[Tbl_Blog]
+   SET {conditions}
+ WHERE BlogId = @BlogId";
+
+            int result = db.Execute(query, blog);
+            string message = result > 0 ? "Updating Successful!" : "Updating Failed!";
+            return Ok(message);
         }
 
         [HttpDelete("{id}")]
@@ -104,9 +141,9 @@ namespace InternshipDotNetCore.RestApi.Controllers
     public class TblBlog
     {
         public int BlogId { get; set; }
-        public string BlogTitle { get; set; }
-        public string BlogAuthor { get; set; }
-        public string BlogContent { get; set; }
+        public string? BlogTitle { get; set; }
+        public string? BlogAuthor { get; set; }
+        public string? BlogContent { get; set; }
 
     }
 
@@ -142,6 +179,7 @@ namespace InternshipDotNetCore.RestApi.Controllers
                               ,[BlogAuthor] = @BlogAuthor
                               ,[BlogContent] = @BlogContent
                            WHERE BlogId = @BlogId";
+        
     }
 
 }
