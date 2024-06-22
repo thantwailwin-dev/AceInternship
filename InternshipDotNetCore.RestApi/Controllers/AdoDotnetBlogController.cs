@@ -9,7 +9,7 @@ namespace InternshipDotNetCore.RestApi.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class AdoDotnetBlogController : ControllerBase
+    public class AdoDotNetBlogController : ControllerBase
     {
         [HttpGet]
         public IActionResult GetBlogs()
