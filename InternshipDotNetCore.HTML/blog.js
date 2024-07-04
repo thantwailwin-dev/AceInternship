@@ -1,9 +1,9 @@
 const tblBlog = "blogs";
 
 // readBlog();
-// createBlog();
+createBlog();
 // updateBlog("c6c5f487-d03f-4360-a53d-f364c7d8993b","twl","twl","twl");
-deleteBlog("c6c5f487-d03f-4360-a53d-f364c7d8993b");
+// deleteBlog("96c4de51-2404-45cd-825a-081f6632c9e2");
 
 function readBlog(){
     const blogs = localStorage.getItem(tblBlog);
@@ -87,4 +87,4 @@ function uuidv4() {
     return "10000000-1000-4000-8000-100000000000".replace(/[018]/g, c =>
       (+c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> +c / 4).toString(16)
     );
-  }
+}

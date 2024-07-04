@@ -15,12 +15,13 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
         private readonly AppDbContext _db = new AppDbContext();
         public void Run()
         {
-            Read();
-            /*Edit(20);*/
-            /*Delete(20);*/
-            /*Create("new title", "new author", "new content");*/
-            /*Update(19, "new test title", "new test author", "new test content");*/
-        }
+            Generate(391);
+			/*Read();*/
+			/*Edit(20);*/
+			/*Delete(20);*/
+			/*Create("new title", "new author", "new content");*/
+			/*Update(19, "new test title", "new test author", "new test content");*/
+		}
 
         private void Create(string title, string author, string content)
         {
@@ -106,6 +107,15 @@ namespace InternshipDotNetCore.ConsoleApp.EFCoreExamples
 
             string message = result > 0 ? "Deleting Successful!" : "Deleting Successful!";
             Console.WriteLine(message);
+        }
+
+        public void Generate(int count)
+        {
+            for(int i = 0; i < count; i++)
+            {
+                int rowCount = (i + 1);
+                Create("Title" + rowCount, "Author" + rowCount, "Content" + rowCount);
+            }
         }
     }
 }

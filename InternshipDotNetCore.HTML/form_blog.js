@@ -40,7 +40,7 @@ function editBlog(id) {
 
 function getBlogs() {
     const blogs = localStorage.getItem(tblBlog);
-    console.log(blogs);
+    // console.log(blogs);
 
     let lst = [];
     if (blogs !== null) {
@@ -138,7 +138,6 @@ $('#btnSave').click(function () {
         updateBlog(blogId, title, author, content);
         blogId = null;
     }
-
     getBlogTable();
 })
 

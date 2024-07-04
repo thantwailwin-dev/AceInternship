@@ -2,6 +2,7 @@
 using InternshipDotNetCore.RestApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace InternshipDotNetCore.RestApi.Controllers
 {
@@ -26,11 +27,36 @@ namespace InternshipDotNetCore.RestApi.Controllers
             return Ok(message);
         }
 
-        [HttpGet]
-        public IActionResult Read()
+        [HttpGet("pageNo/{pageNo}/pageSize/{pageSize}")]
+        public IActionResult Read(int pageNo,int pageSize)
         {
-            List<BlogModel> lst = _appDbContext.Blogs.ToList();
-            return Ok(lst);
+			int rowCount = _appDbContext.Blogs.Count();
+			int pageCount = rowCount / pageSize;
+
+			if (rowCount % pageSize > 0)			
+				pageCount++;
+
+            if(pageNo > pageCount)
+            {
+                return BadRequest(new { Message = "Invalid PageNo." });
+            }
+			
+
+			List<BlogModel> lst = _appDbContext.Blogs
+                .OrderByDescending(x => x.BlogId)
+                .Skip((pageNo - 1) * pageSize)
+                .Take(pageSize)
+			.ToList();					
+
+
+			BlogResponseModel model = new BlogResponseModel();
+            model.Data = lst;
+            model.PageNo = pageNo;
+            model.PagSize = pageSize;
+            model.PageCount = pageCount;
+            /*model.IsEndOfPage = pageNo == pageCount;*/
+
+			return Ok(model);
         }
 
         [HttpGet("{id}")]
