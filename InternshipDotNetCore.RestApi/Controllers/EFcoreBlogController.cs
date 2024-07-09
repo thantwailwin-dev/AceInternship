@@ -27,8 +27,9 @@ namespace InternshipDotNetCore.RestApi.Controllers
             return Ok(message);
         }
 
+        [HttpGet("{pageNo}/{pageSize}")]
         [HttpGet("pageNo/{pageNo}/pageSize/{pageSize}")]
-        public IActionResult Read(int pageNo,int pageSize)
+        public IActionResult Read(int pageNo,int pageSize)        
         {
 			int rowCount = _appDbContext.Blogs.Count();
 			int pageCount = rowCount / pageSize;
@@ -52,7 +53,7 @@ namespace InternshipDotNetCore.RestApi.Controllers
 			BlogResponseModel model = new BlogResponseModel();
             model.Data = lst;
             model.PageNo = pageNo;
-            model.PagSize = pageSize;
+            model.PageSize = pageSize;
             model.PageCount = pageCount;
             /*model.IsEndOfPage = pageNo == pageCount;*/
 

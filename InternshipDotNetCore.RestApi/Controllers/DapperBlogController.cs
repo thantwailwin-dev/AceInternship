@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Serilog;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -44,6 +46,8 @@ namespace InternshipDotNetCore.RestApi.Controllers
 
             using IDbConnection db = new SqlConnection(_sqlConnectionStringBuilder.ConnectionString);
             var lst = db.Query<TblBlog>(Quaries.BlogList).ToList();
+
+            Log.Information(JsonConvert.SerializeObject(lst,Formatting.Indented));
             return Ok(lst);
         }
 
