@@ -3,6 +3,7 @@ using InternshipDotNetCore.RestApi.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace InternshipDotNetCore.RestApi.Controllers
 {
@@ -11,11 +12,19 @@ namespace InternshipDotNetCore.RestApi.Controllers
     public class EFCoreBlogController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly ILogger<EFCoreBlogController> _logger;
 
-        public EFCoreBlogController()
+        public EFCoreBlogController(ILogger<EFCoreBlogController> logger)
+        {
+            _logger = logger;
+            _appDbContext = new AppDbContext();
+
+        }
+
+       /* public EFCoreBlogController()
         {
             _appDbContext = new AppDbContext();
-        }
+        }*/
 
         [HttpPost]
         public IActionResult CreateBlog(BlogModel blog)
@@ -57,7 +66,10 @@ namespace InternshipDotNetCore.RestApi.Controllers
             model.PageCount = pageCount;
             /*model.IsEndOfPage = pageNo == pageCount;*/
 
-			return Ok(model);
+            _logger.LogInformation("Count is" + model.PageCount.ToString());
+            _logger.LogInformation(JsonConvert.SerializeObject(model,Formatting.Indented));
+
+            return Ok(model);
         }
 
         [HttpGet("{id}")]

@@ -1,8 +1,25 @@
 using Serilog;
+using Serilog.Sinks.MSSqlServer;
+using System.Configuration;
+
+string outputFolderPath = AppDomain.CurrentDomain.BaseDirectory;
+string logFilePath = Path.Combine(outputFolderPath, "logs/InternshipDotNetCore.RestApi_.log");
+var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json",
+    optional:false,
+    reloadOnChange: true).Build();
+string connectionString = configuration.GetConnectionString("DbConnection");
 
 Log.Logger = new LoggerConfiguration()
     .WriteTo.Console()
-    .WriteTo.File("logs/InternshipDotNetCore.RestApi.log", rollingInterval: RollingInterval.Day)
+    .WriteTo.File(logFilePath, rollingInterval: RollingInterval.Hour)
+    .WriteTo
+    .MSSqlServer(
+        connectionString: connectionString,
+        sinkOptions: new MSSqlServerSinkOptions 
+        { 
+            TableName = "Tbl_LogEvents", 
+            AutoCreateSqlTable = true 
+        })
     .CreateLogger();
 
 try
