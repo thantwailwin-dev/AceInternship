@@ -2,6 +2,7 @@ using Serilog;
 using Serilog.Sinks.MSSqlServer;
 using System.Configuration;
 
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
 string outputFolderPath = AppDomain.CurrentDomain.BaseDirectory;
 string logFilePath = Path.Combine(outputFolderPath, "logs/InternshipDotNetCore.RestApi_.log");
 var configuration = new ConfigurationBuilder().AddJsonFile("appsettings.json",
@@ -28,6 +29,18 @@ try
 
     var builder = WebApplication.CreateBuilder(args);
 
+    builder.Services.AddCors(options =>
+    {
+        options.AddPolicy(name: MyAllowSpecificOrigins,
+                          policy =>
+                          {
+                              policy.WithOrigins("https://localhost:7182",
+                                                  "http://localhost:5276")
+                              .AllowAnyMethod()
+                              .AllowAnyHeader();
+                          });
+    });
+
     builder.Services.AddSerilog();
 
     // Add services to the container.
@@ -47,6 +60,8 @@ try
     }
 
     app.UseHttpsRedirection();
+
+    app.UseCors(MyAllowSpecificOrigins);
 
     app.UseAuthorization();
 

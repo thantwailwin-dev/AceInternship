@@ -1,0 +1,163 @@
+﻿@page "/blog"
+@using Newtonsoft.Json
+@using System.Text
+@using static System.Net.Mime.MediaTypeNames
+@inject HttpClient HttpClient
+@inject IJSRuntime JSRuntime
+
+<h3>PageBlog</h3>
+<span>Count : @Blogs.Count</span>
+<div class="mb-3">
+    <label class="form-label">Title</label>
+    <input type="text" class="form-control" @bind-value="requestModel.BlogTitle">
+</div>
+<div class="mb-3">
+    <label class="form-label">Author</label>
+    <input type="text" class="form-control" @bind-value="requestModel.BlogAuthor">
+</div>
+<div class="mb-3">
+    <label class="form-label">Content</label>
+    <input type="text" class="form-control" @bind-value="requestModel.BlogContent">
+</div>
+
+@if (requestModel.BlogId == 0)
+{
+    <button type="button" class="btn btn-primary" @onclick="Save">Save</button>
+}
+else if (requestModel.BlogId != 0)
+{
+    <button type="button" class="btn btn-primary" @onclick="Update">Update</button>
+}
+
+@if (Blogs is not null)
+{
+    int count = 0;
+    <table class="table">
+        <thead>
+            <tr>
+                <th>No</th>
+                <th>ID</th>
+                <th>Title</th>
+                <th>Author</th>
+                <th>Content</th>
+                <th></th>             
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Blogs)
+            {
+                <tr>
+                    <td>@(++count)</td>
+                    <td>@item.BlogId</td>
+                    <td>@item.BlogTitle</td>
+                    <td>@item.BlogAuthor</td>
+                    <td>@item.BlogContent</td>
+                    <td>
+                        <button type="button" class="btn btn-success" @onclick="() => Edit(item.BlogId)">Edit</button>
+                        <button type="button" class="btn btn-danger" @onclick="() => Delete(item.BlogId)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private readonly string apiEndpoint = "api/DapperBlog";
+    private BlogModel requestModel = new();
+    private List<BlogModel> Blogs = new List<BlogModel>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await List();
+    }
+
+    private async Task List()
+    {
+        var res = await HttpClient.GetAsync(apiEndpoint);
+        if (res.IsSuccessStatusCode)
+        {
+            var resStr = await res.Content.ReadAsStringAsync();            
+            Blogs = JsonConvert.DeserializeObject<List<BlogModel>>(resStr)!;
+
+        }
+    }
+
+    private async Task Save()
+    {
+        var blogJsn = JsonConvert.SerializeObject(requestModel);
+        var httpContent = new StringContent(blogJsn,Encoding.UTF8,Application.Json);
+        var res = await HttpClient.PostAsync(apiEndpoint, httpContent);
+
+        if (res.IsSuccessStatusCode)
+        {
+            var message = await res.Content.ReadAsStringAsync();
+            await JSRuntime.InvokeVoidAsync("alert", message);
+            requestModel = new();
+            await List();
+        }
+    }
+
+    private async Task Edit(int id)
+    {
+        var res = await HttpClient.GetAsync($"{apiEndpoint}/{id}");
+        if (res.IsSuccessStatusCode)
+        {
+            var resStr = await res.Content.ReadAsStringAsync();
+            requestModel = JsonConvert.DeserializeObject<BlogModel>(resStr)!;
+        }
+    }
+
+    private async Task Update()
+    {
+        var blogJsn = JsonConvert.SerializeObject(requestModel);
+        var httpContent = new StringContent(blogJsn, Encoding.UTF8, Application.Json);
+        var res = await HttpClient.PutAsync($"{apiEndpoint}/{requestModel.BlogId}", httpContent);
+
+        if (res.IsSuccessStatusCode)
+        {
+            var message = await res.Content.ReadAsStringAsync();
+            await JSRuntime.InvokeVoidAsync("alert", message);
+            requestModel = new();
+            await List();
+        }
+    }
+
+    private async Task Delete(int id)
+    {
+        var result = await JSRuntime.InvokeAsync<bool>("confirm", "Are you sure want to delete?");
+        if (!result) return;
+
+        var res = await HttpClient.DeleteAsync($"{apiEndpoint}/{id}");
+        if (res.IsSuccessStatusCode)
+        {
+            var message = await res.Content.ReadAsStringAsync();
+            await JSRuntime.InvokeVoidAsync("alert", message);
+            requestModel = new();
+            await List();
+        }
+    }
+
+    public class BlogModel
+    {
+        public int BlogId { get; set; }
+        public string? BlogTitle { get; set; }
+        public string? BlogAuthor { get; set; }
+        public string? BlogContent { get; set; }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
