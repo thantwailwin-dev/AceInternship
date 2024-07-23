@@ -17,7 +17,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternshipDotNetCore.MiniAc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternshipDotNetCore.Shared", "InternshipDotNetCore.Shared\InternshipDotNetCore.Shared.csproj", "{C28EBF7C-F4FD-4E20-BD15-3C4575504B8C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternshipDotNetCore.BlazorWasmApp", "InternshipDotNetCore.BlazorWasmApp\InternshipDotNetCore.BlazorWasmApp.csproj", "{3F51BC91-1CA1-45EF-8068-502E437753F1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InternshipDotNetCore.BlazorWasmApp", "InternshipDotNetCore.BlazorWasmApp\InternshipDotNetCore.BlazorWasmApp.csproj", "{3F51BC91-1CA1-45EF-8068-502E437753F1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InternshipDotNetCore.DatabaseFirstAuto", "InternshipDotNetCore.DatabaseFirstAuto\InternshipDotNetCore.DatabaseFirstAuto.csproj", "{564BAD39-9DB4-4376-985F-6AFDBD95B0DE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +47,10 @@ Global
 		{3F51BC91-1CA1-45EF-8068-502E437753F1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3F51BC91-1CA1-45EF-8068-502E437753F1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3F51BC91-1CA1-45EF-8068-502E437753F1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{564BAD39-9DB4-4376-985F-6AFDBD95B0DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{564BAD39-9DB4-4376-985F-6AFDBD95B0DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{564BAD39-9DB4-4376-985F-6AFDBD95B0DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{564BAD39-9DB4-4376-985F-6AFDBD95B0DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
